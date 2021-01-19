@@ -26,13 +26,14 @@ class OrderForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.clearInputs();
-    const newOrder = {
+    if (this.state.name && this.state.ingredients.length) {
+      const newOrder = {
       id: Date.now(), 
       name: this.state.name,
       ingredients: this.state.ingredients
     }
-    console.log(newOrder)
     this.props.addToOrders(newOrder)
+    }
   }
 
   clearInputs = () => {
