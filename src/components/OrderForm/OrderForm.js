@@ -17,7 +17,6 @@ class OrderForm extends Component {
   }
 
   handleIngredientChange = (e, newIngredient) => {
-    console.log(e)
     e.preventDefault()
     this.setState({
       ingredients: [...this.state.ingredients, newIngredient]
@@ -27,6 +26,13 @@ class OrderForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.clearInputs();
+    const newOrder = {
+      id: Date.now(), 
+      name: this.state.name,
+      ingredients: this.state.ingredients
+    }
+    console.log(newOrder)
+    this.props.addToOrders(newOrder)
   }
 
   clearInputs = () => {
