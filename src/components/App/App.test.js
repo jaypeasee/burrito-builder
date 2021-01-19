@@ -4,7 +4,7 @@ import { screen, render, waitFor, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 jest.mock('../../apiCalls.js')
-import {getOrders, postNewOrder} from '../../apiCalls';
+import {getOrders, postNewOrder, deleteOrder} from '../../apiCalls';
 
 describe("App", () =>{
     let mockOrders
@@ -53,5 +53,13 @@ describe("App", () =>{
         userEvent.click(submitBtn)
         const ringo = await waitFor(() => screen.getByText("Ringo"))
         expect(ringo).toBeInTheDocument()
+    })
+
+    it('should be able to remove an existing order', () => {
+        deleteOrder.mockResolvedValueOnce(mockOrders)
+        const john = screen.getByText("John")   
+        const johnRemove = screen.getByTestId("1-delete-btn")
+        userEvent.click(johnRemove)
+        expect(john).not.toBeInTheDocument()
     })
 })
