@@ -1,6 +1,6 @@
 import React from 'react'
 import App from './App'
-import { screen, render, waitFor } from '@testing-library/react'
+import { screen, render, waitFor, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 jest.mock('../../apiCalls.js')
@@ -33,15 +33,28 @@ describe("App", () =>{
             ]
         }
         getOrders.mockResolvedValueOnce(mockOrders)
+        postNewOrder.mockResolvedValueOnce(mockOrders)
         render (<App />)
         nameInput = screen.getByPlaceholderText("Name")
         ingredientBtns = screen.getAllByTestId("ingredient-btn")
         submitBtn = screen.getByText("Submit Order")
     })
 
-    it('should have existing reservations appear after App renders', () => {
-        expect(screen.getByText("John")).toBeInTheDocument()
-        expect(screen.getByText("Paul")).toBeInTheDocument()
-        expect(screen.getByText("George")).toBeInTheDocument()
+    it('should have existing orders appear after App renders', async () => {
+        const john = await waitFor(() => screen.getByText("John"))
+        expect(john).toBeInTheDocument()
+        const paul = await waitFor(() => screen.getByText("Paul"))
+        expect(paul).toBeInTheDocument()
+        const george = await waitFor(() => screen.getByText("George"))
+        expect(george).toBeInTheDocument()
+    })
+
+    it('should be able to add an order to the existing list', async () => {
+        userEvent.type(nameInput, "Ringo")
+        userEvent.click(ingredientBtns[0])
+        userEvent.click(ingredientBtns[2])
+        userEvent.click(submitBtn)
+        const ringo = await waitFor(() => screen.getByText("Ringo"))
+        expect(ringo).toBeInTheDocument()
     })
 })
