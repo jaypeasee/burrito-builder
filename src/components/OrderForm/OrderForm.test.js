@@ -49,4 +49,17 @@ describe('OrderForm', () => {
             ingredients: ["beans", "carnitas"]
         })
     })
+
+    it('should not be able to call addToOrders() without a name', () => {
+        userEvent.click(ingredientBtns[0])
+        userEvent.click(ingredientBtns[2])
+        userEvent.click(submitBtn)
+        expect(addToOrders).not.toHaveBeenCalled()
+    })
+
+    it('should not be able to call addToOrders() without any ingredients', () => {
+        userEvent.type(nameInput, "JP")
+        userEvent.click(submitBtn)
+        expect(addToOrders).not.toHaveBeenCalled()
+    })
 })
