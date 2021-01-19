@@ -7,9 +7,6 @@ jest.mock('../../apiCalls.js')
 import {getOrders, postNewOrder} from '../../apiCalls';
 
 describe("App", () =>{
-    let nameInput
-    let ingredientBtns
-    let submitBtn
     let mockOrders
 
     beforeEach(() => {
@@ -33,11 +30,7 @@ describe("App", () =>{
             ]
         }
         getOrders.mockResolvedValueOnce(mockOrders)
-        postNewOrder.mockResolvedValueOnce(mockOrders)
         render (<App />)
-        nameInput = screen.getByPlaceholderText("Name")
-        ingredientBtns = screen.getAllByTestId("ingredient-btn")
-        submitBtn = screen.getByText("Submit Order")
     })
 
     it('should have existing orders appear after App renders', async () => {
@@ -50,6 +43,10 @@ describe("App", () =>{
     })
 
     it('should be able to add an order to the existing list', async () => {
+        postNewOrder.mockResolvedValueOnce(mockOrders)
+        const nameInput = screen.getByPlaceholderText("Name")
+        const ingredientBtns = screen.getAllByTestId("ingredient-btn")
+        const submitBtn = screen.getByText("Submit Order")
         userEvent.type(nameInput, "Ringo")
         userEvent.click(ingredientBtns[0])
         userEvent.click(ingredientBtns[2])
